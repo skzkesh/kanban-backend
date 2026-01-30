@@ -1,8 +1,6 @@
-import jwt from "jsonwebtoken";
+import { randomUUID } from "crypto";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-
-const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function GET(request: Request){
     try {
@@ -20,3 +18,42 @@ export async function GET(request: Request){
         )
     }
 }
+
+export async function POST(request: Request){
+    try {
+        const body = await request.json();
+        const { title } = body;
+
+        const userId = requireAuth(request);
+
+        const board = await prisma.board.create({
+            data : {
+                id: randomUUID(),
+                title: title,
+                ownerId: userId,
+            }
+        })
+
+        return new Response(
+            JSON.stringify(board), 
+            { status: 201 }
+        )
+    }
+    catch (error){
+        return new Response(
+            JSON.stringify({ error: "Fail to create new board" }),
+            { status: 401 }
+        )
+    }
+}
+
+// -- CreateTable
+// CREATE TABLE "Board" (
+//     "id" TEXT NOT NULL,
+//     "title" TEXT NOT NULL,
+//     "ownerId" TEXT NOT NULL,
+//     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+//     CONSTRAINT "Board_pkey" PRIMARY KEY ("id")
+// );
