@@ -1,13 +1,16 @@
 import { randomUUID } from "crypto";
 import { requireAuth } from "@/lib/auth";
-import { getBoardsByUser } from "@/lib/board.service";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request){
     try {
         const userId = requireAuth(request);
 
-        const userBoards = await getBoardsByUser(userId);
+        const board =
+
+        const userColumns = await prisma.column.findMany({
+            where: { : userId, },
+        })
         return new Response(JSON.stringify(userBoards), { status: 200 })
     }
     catch (error){

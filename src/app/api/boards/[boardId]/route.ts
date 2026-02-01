@@ -7,38 +7,30 @@ export async function GET (
     request: NextRequest,
     { params }: { params: { boardId: string } },
 ){
-    try {
-        const { boardId } = params;
-        const userId = requireAuth(request);
+    const { boardId } = params;
+    const userId = requireAuth(request);
 
-        const board = await prisma.board.findFirst({
-            where: { 
-                id: boardId,
-                ownerId: userId,
-            }
-        })
-
-        if (!board) {
-            return new Response(
-            JSON.stringify({ error: "Board not found" }),
-            { status: 404 }
-            );
+    const board = await prisma.board.findFirst({
+        where: { 
+            id: boardId,
+            ownerId: userId,
         }
+    })
 
-        return new Response(JSON.stringify({ 
-            board 
-        }),
-        {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        })
-    }
-    catch (error){
+    if (!board) {
         return new Response(
-            JSON.stringify({ error: "Unauthorized" }),
-            { status: 404 }
-        )
+        JSON.stringify({ error: "Board not found" }),
+        { status: 404 }
+        );
     }
+
+    return new Response(JSON.stringify({ 
+        board 
+    }),
+    {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    })
 };
 
 
