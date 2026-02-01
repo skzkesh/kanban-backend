@@ -7,6 +7,11 @@ export async function getBoardsByUser(userId: string){
     });
 }
 
-// export async function getBoardById(boardId: string){
-
-// }
+export async function getBoardById(boardId: string, userId: string){
+    return prisma.board.findFirst({
+        where: { 
+            id: boardId,
+            ownerId: userId,
+        }
+    })
+}

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
+import { getBoardById } from "@/lib/board.service";
 import { NextRequest } from "next/server";
 
 
@@ -10,13 +11,8 @@ export async function GET (
     const { boardId } = params;
     const userId = requireAuth(request);
 
-    const board = await prisma.board.findFirst({
-        where: { 
-            id: boardId,
-            ownerId: userId,
-        }
-    })
-
+    const board = await getBoardById(boardId, userId);
+    
     if (!board) {
         return new Response(
         JSON.stringify({ error: "Board not found" }),

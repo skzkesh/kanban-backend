@@ -3,19 +3,22 @@ import { requireAuth } from "@/lib/auth";
 import { getBoardsByUser } from "@/lib/board.service";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: Request){
-    try {
-        const userId = requireAuth(request);
+export async function GET(request: Request) {
+  try {
+    const userId = requireAuth(request);
 
-        const userBoards = await getBoardsByUser(userId);
-        return new Response(JSON.stringify(userBoards), { status: 200 })
-    }
-    catch (error){
-        return new Response(
-            JSON.stringify({ error: "Unauthorized" }),
-            { status: 401 }
-        )
-    }
+    const userBoards = await getBoardsByUser(userId);
+
+    return new Response(JSON.stringify(userBoards), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      { status: 401 }
+    );
+  }
 }
 
 export async function POST(request: Request){
