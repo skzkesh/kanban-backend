@@ -15,3 +15,12 @@ export async function getBoardById(boardId: string, userId: string){
         }
     })
 }
+
+export async function createBoard(userId: string, title: string){
+    return prisma.board.create({
+        data : {
+            title: title,
+            ownerId: userId,
+        }
+    })
+}

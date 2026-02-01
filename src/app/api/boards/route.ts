@@ -1,7 +1,5 @@
-import { randomUUID } from "crypto";
 import { requireAuth } from "@/lib/auth";
-import { getBoardsByUser } from "@/lib/board.service";
-import { prisma } from "@/lib/prisma";
+import { getBoardsByUser, createBoard } from "@/lib/board.service";
 
 export async function GET(request: Request) {
   try {
@@ -13,7 +11,8 @@ export async function GET(request: Request) {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
+  } 
+  catch {
     return new Response(
       JSON.stringify({ error: "Unauthorized" }),
       { status: 401 }
@@ -26,20 +25,21 @@ export async function POST(request: Request){
         const body = await request.json();
         const { title } = body;
 
+        if (!title) {
+            return new Response(
+                JSON.stringify({ error: "Title required" }),
+                { status: 400 }
+            );
+        }
+
         const userId = requireAuth(request);
 
-        const board = await prisma.board.create({
-            data : {
-                id: randomUUID(),
-                title: title,
-                ownerId: userId,
-            }
-        })
+        const board = await createBoard(userId, title);
 
-        return new Response(
-            JSON.stringify(board), 
-            { status: 201 }
-        )
+        return new Response(JSON.stringify(board), { 
+            status: 201,
+            headers: { "Content-Type": "application/json" },
+        })
     }
     catch (error){
         return new Response(
