@@ -3,7 +3,25 @@ import { getTasksByColumn, createTask, getTaskCount } from "@/lib/task.service";
 import { getBoardIdByColumn } from "@/lib/column.service";
 
 // Get all tasks for a column
-//export async function 
+export async function GET(
+    request: NextRequest,
+    { params }: { params: { columnId: string } }
+) {
+    try {
+        const tasks = await getTasksByColumn(params.columnId);
+        
+        return new Response(JSON.stringify({ tasks }), {
+            status: 200, // OK
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        return new Response(
+            JSON.stringify({ error: "Failed to retrieve tasks" }),
+            { status: 500 } // Internal Server Error
+        );
+    }
+}
 
 // Create a new task
 export async function POST(
