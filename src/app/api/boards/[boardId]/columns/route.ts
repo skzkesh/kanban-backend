@@ -25,7 +25,6 @@ export async function GET(
 }
 
 // Create a column for a board
-// Create a column for a board
 export async function POST(
     request: NextRequest,
     { params }: { params: { boardId: string } }
@@ -33,7 +32,6 @@ export async function POST(
     try {
         const { title } = await request.json();
 
-        // Check if title is provided
         if (!title) {
             return new Response(
                 JSON.stringify({ error: "Title required" }),
@@ -41,23 +39,19 @@ export async function POST(
             );
         }
 
-        // Get the authenticated user's ID
         const userId = requireAuth(request);
         
-        // Use getColumnCount to retrieve the current count of columns
-        const lastCount = await getColumnCount(params.boardId); // Await the count
-        const order = lastCount + 1; // Set order based on the column count
+        const lastCount = await getColumnCount(params.boardId); 
+        const order = lastCount + 1; 
 
-        // Create the new column
         const newColumn = await createColumn(params.boardId, title, order);
 
-        // Return the newly created column as a response
         return new Response(JSON.stringify(newColumn), { 
             status: 201, // Created
             headers: { "Content-Type": "application/json" },
         });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         return new Response(
             JSON.stringify({ error: "Failed to create new column" }),
             { status: 500 } // Internal Server Error
