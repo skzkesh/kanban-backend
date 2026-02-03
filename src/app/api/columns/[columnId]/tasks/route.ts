@@ -15,10 +15,10 @@ export async function GET(
             headers: { "Content-Type": "application/json" },
         });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         return new Response(
             JSON.stringify({ error: "Failed to retrieve tasks" }),
-            { status: 500 } // Internal Server Error
+            { status: 500 } 
         );
     }
 }

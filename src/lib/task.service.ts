@@ -23,3 +23,21 @@ export async function getTaskCount(columnId: string){
         where: { columnId: columnId }
     });
 }
+
+export async function getTaskById(columnId: string, taskId: string){
+    return prisma.task.findFirst({
+        where: { 
+            id: taskId,
+            columnId: columnId,
+        },
+    });
+}
+
+export async function deleteTask(columnId: string, taskId: string){
+    return await prisma.task.delete({
+        where: {
+            id: taskId,
+            columnId: columnId,
+        }
+    })
+}
