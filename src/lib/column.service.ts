@@ -16,3 +16,9 @@ export async function createColumn(boardId: string, title: string, order: number
         }
     })
 }
+
+export async function getColumnCount(boardId: string){
+    return prisma.column.count({
+        where: { boardId: boardId }
+    });
+}

@@ -1,6 +1,7 @@
 import { requireAuth } from "@/lib/auth";
 import { getBoardsByUser, createBoard } from "@/lib/board.service";
 
+// Get all boards for a user
 export async function GET(request: Request) {
   try {
     const userId = requireAuth(request);
@@ -20,6 +21,7 @@ export async function GET(request: Request) {
   }
 }
 
+// Create a new board
 export async function POST(request: Request){
     try {
         const body = await request.json();

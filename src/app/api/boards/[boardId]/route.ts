@@ -3,7 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import { getBoardById } from "@/lib/board.service";
 import { NextRequest } from "next/server";
 
-
+// Get specific board
 export async function GET (
     request: NextRequest,
     { params }: { params: { boardId: string } },
@@ -29,6 +29,7 @@ export async function GET (
     })
 };
 
+// Delete a board
 export async function DELETE (
     request: NextRequest,
     { params }: { params: { boardId: string } },
