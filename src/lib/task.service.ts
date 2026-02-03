@@ -17,3 +17,9 @@ export async function createTask(columnId: string, boardId: string, title: strin
         }
     })
 }
+
+export async function getTaskCount(columnId: string){
+    return prisma.task.count({
+        where: { columnId: columnId }
+    });
+}

@@ -17,6 +17,14 @@ export async function createColumn(boardId: string, title: string, order: number
     })
 }
 
+export async function getBoardIdByColumn(columnId: string){
+    const column = await prisma.column.findUnique({
+        where: { id: columnId },
+    });
+
+    return column ? column.boardId : null; 
+}
+
 export async function getColumnCount(boardId: string){
     return prisma.column.count({
         where: { boardId: boardId }
