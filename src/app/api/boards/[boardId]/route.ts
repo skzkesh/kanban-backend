@@ -29,4 +29,28 @@ export async function GET (
     })
 };
 
+export async function DELETE (
+    request: NextRequest,
+    { params }: { params: { boardId: string } },
+){
+    const { boardId } = params;
+    const userId = requireAuth(request);
 
+    try {
+        await prisma.board.delete({
+            where: {
+                id: boardId,
+                ownerId: userId,
+            }
+        })
+
+        return new Response(JSON.stringify({ message: "Board deleted successfully" }),  { status: 204 })
+    }
+    catch (error){
+        return new Response(JSON.stringify({
+            error: "Internal server error"
+        }),
+            {status: 500}
+        )
+    }
+}
